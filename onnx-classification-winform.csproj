@@ -9,10 +9,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Platform>x64</Platform>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.20.1" />
-    <None Include="Model/*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <EmbeddedResource Include="Model/label_cn.txt"></EmbeddedResource>
+    <EmbeddedResource Include="Model/label_en.txt"></EmbeddedResource>
+    <EmbeddedResource Include="Model/mobilenetv2-10.onnx"></EmbeddedResource>
   </ItemGroup>
 
 </Project>

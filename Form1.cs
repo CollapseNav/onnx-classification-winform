@@ -8,8 +8,9 @@ public partial class Form1 : Form
     private string[] Labels;
     public Form1()
     {
-        Labels = ModelLoader.LoadLabels("./Model/label_cn.txt");
-        Inf = ModelLoader.LoadModel("./Model/mobilenetv2-10.onnx", Hardware.DML);
+        InitializeComponent();
+        Labels = ModelLoader.LoadLabels("onnx_classification_winform.Model.label_cn.txt");
+        Inf = ModelLoader.LoadModel("onnx_classification_winform.Model.mobilenetv2-10.onnx", Hardware.DML);
         var inputName = Inf.InputNames[0];
         var inputMetadata = Inf.InputMetadata[inputName];
         var dimensions = inputMetadata.Dimensions;
@@ -48,7 +49,6 @@ public partial class Form1 : Form
             }
         };
 
-        InitializeComponent();
     }
 
     private IEnumerable<float> SoftMax(IEnumerable<float> output)
