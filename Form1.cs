@@ -1,3 +1,4 @@
+using System.Data;
 using Microsoft.ML.OnnxRuntime;
 
 namespace onnx_classification_winform;
@@ -31,11 +32,13 @@ public partial class Form1 : Form
         Controls.Add(grid);
         grid.AutoSize = true;
         grid.Visible = false;
+        grid.Location = new Point(button.Location.X, button.Location.Y + button.Height + 10);
 
         OriginPic form = new OriginPic();
         OriginPic form2 = new OriginPic();
         button.Click += (_, _) =>
         {
+            grid.Visible = false;
             if (useCpu.Checked)
                 SwitchInf(Hardware.CPU);
             else if (useDml.Checked)
@@ -68,9 +71,33 @@ public partial class Form1 : Form
                             .Take(6)
                             .ToArray();
                 grid.DataSource = result;
-                grid.Location = new Point(button.Location.X, button.Location.Y + button.Height + 10);
                 grid.Visible = true;
+                grid.Refresh();
             }
+        };
+
+        Button showLabels = new Button();
+        Controls.Add(showLabels);
+        showLabels.Text = "显示标签";
+        showLabels.Location = new Point(useDml.Location.X + useDml.Width + 10, useDml.Location.Y);
+
+        showLabels.Click += (_, _) =>
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.AddRange(Enumerable.Range(0, 10).Select(item => new DataColumn(item.ToString())).ToArray());
+            Labels.Chunk(10)
+            .Select(labels => labels.Select((label, index) => new { label, index })
+            .ToDictionary(item => item.index, item => item.label)).ToList()
+            .ForEach(item =>
+            {
+                var row = dt.NewRow();
+                row.ItemArray = item.Values.ToArray();
+                dt.Rows.Add(row);
+            });
+            grid.DataSource = dt;
+            grid.Visible = true;
+            grid.ScrollBars = ScrollBars.Vertical;
+            grid.Location = new Point(button.Location.X, button.Location.Y + button.Height + 10);
         };
     }
 
