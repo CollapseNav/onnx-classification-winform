@@ -127,9 +127,10 @@ public partial class Form1 : Form
             ResizeImage.Close();
             Hide();
             Thread.Sleep(300);
-            Bitmap bitmap = new(Screen.AllScreens[0].Bounds.Width, Screen.AllScreens[0].Bounds.Height);
+            var CurrentScreen = Screen.FromPoint(Cursor.Position);
+            Bitmap bitmap = new(CurrentScreen.Bounds.Width, CurrentScreen.Bounds.Height);
             Graphics graphics = Graphics.FromImage(bitmap);
-            graphics.CopyFromScreen(new Point(0, 0), new Point(0, 0), Screen.AllScreens[0].Bounds.Size);
+            graphics.CopyFromScreen(new Point(0, 0), new Point(0, 0), CurrentScreen.Bounds.Size);
             //创建新的截图窗口，将刚才的屏幕作为背景
             ImageCut = new ImageCut { Owner = this, BackgroundImage = bitmap };
             ImageCut.Cut += GetResult;
