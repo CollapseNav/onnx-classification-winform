@@ -11,12 +11,13 @@ public class ImageCut : Form
     public Action<Bitmap> Cut;
     public ImageCut()
     {
-        SuspendLayout();
         AutoScaleDimensions = new SizeF(6F, 12F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(Screen.PrimaryScreen?.Bounds.Width ?? 1920, Screen.PrimaryScreen?.Bounds.Height ?? 1080);
+        var CurrentScreen = Screen.FromPoint(Cursor.Position);
+        ClientSize = new Size(CurrentScreen.Bounds.Width, CurrentScreen.Bounds.Height);
+        StartPosition = FormStartPosition.Manual;
+        Location = CurrentScreen.Bounds.Location;
         FormBorderStyle = FormBorderStyle.None;
-        ResumeLayout(false);
         KeyDown += ImageCut_KeyDown;
         MouseClick += ImageCut_MouseClick;
         MouseDown += ImageCut_MouseDown;
